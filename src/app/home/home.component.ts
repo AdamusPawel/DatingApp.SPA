@@ -17,13 +17,17 @@ values: any;
   }
 
   registerToggle() {
-   this.registerMode = !this.registerMode;
+   this.registerMode = true;
   }
 
   getValues() {
     this.http.get('http://localhost:5000/api/values').subscribe(response => {
       this.values = response.json();
     });
+  }
+
+  cancelRegisterMode(registerMode: boolean) {
+    this.registerMode = registerMode;
   }
 
 }
