@@ -1,3 +1,5 @@
+import { UserService } from './_services/user.service';
+import { RouterModule } from '@angular/router';
 import { appRoutes } from './routes';
 import { AuthGuard } from './_guards/auth.guard';
 import { FormsModule } from '@angular/forms';
@@ -16,7 +18,8 @@ import { BsDropdownModule } from 'ngx-bootstrap';
 import { MemberListComponent } from './member-list/member-list.component';
 import { ListsComponent } from './lists/lists.component';
 import { MessagesComponent } from './messages/messages.component';
-import { RouterModule } from '@angular/router';
+
+
 
 
 @NgModule({
@@ -39,7 +42,8 @@ import { RouterModule } from '@angular/router';
   providers: [
   AuthService,
   AlertifyService,
-  AuthGuard
+  AuthGuard,
+  UserService
   ],
   bootstrap: [AppComponent]
 })
