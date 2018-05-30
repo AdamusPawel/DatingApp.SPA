@@ -1,3 +1,4 @@
+import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
 import { MemberEditResolver } from './_resolvers/member-edit.resolver';
 import { MemberEditComponent } from './members/member-edit/member-edit.component';
 import { AuthModule } from './auth/auth.module';
@@ -55,7 +56,8 @@ import { NgxGalleryModule } from 'ngx-gallery';
   UserService,
   MemberDetailResolver,
   MemberListResolver,
-  MemberEditResolver
+  MemberEditResolver,
+  PreventUnsavedChanges
   ],
   bootstrap: [AppComponent]
 })
