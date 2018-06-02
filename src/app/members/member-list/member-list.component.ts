@@ -15,15 +15,14 @@ export class MemberListComponent implements OnInit {
   constructor(private userService: UserService, private alertify: AlertifyService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    /*
     this.route.data.subscribe(data => {
-      this.users = data['users'];
+      this.users = data['users'].result;
     });
-    */
-    this.loadUsers();
+    // this.loadUsers().result;
   }
 
   // ta funkcja powinna być wtedy usunięta
+  /*
   loadUsers() {
     this.userService.getUsers().subscribe((users: User[]) => {
       this.users = users;
@@ -31,5 +30,6 @@ export class MemberListComponent implements OnInit {
       this.alertify.error(error);
     });
   }
+  */
 
 }
