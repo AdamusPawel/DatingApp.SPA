@@ -51,7 +51,7 @@ export class PhotoEditorComponent implements OnInit {
           dateAdded: res.dateAdded,
           description: res.description,
           isMain: res.isMain
-        }
+        };
         this.photos.push(photo);
       }
     };
@@ -62,8 +62,23 @@ export class PhotoEditorComponent implements OnInit {
       this.currentMain =  _.findWhere(this.photos, {isMain: true});
       this.currentMain.isMain = false;
       photo.isMain = true;
+      this.authService.changeMemberPhoto(photo.url);
       this.getMemberPhotoChange.emit(photo.url);
+      this.authService.currentUser.photoUrl = photo.url;
+      localStorage.setItem('user', JSON.stringify(this.authService.currentUser));
     }, error => {
       this.alertify.error(error);
-  });
+    });
   }
+
+  deletePhoto(id: number) {
+    this.alertify.confirm('DatingApp', 'Are you sure to want to delete this photo?', () => {
+      this.userService.deletePhoto(this.authService.decodedToken.nameid, id).subscribe(() => {
+        this.photos.splice(_.findIndex(this.photos, { id: id }), 1);
+        this.alertify.success('Photo has been deleted');
+      }, error => {
+        this.alertify.error('Failed to delete photo');
+      });
+    });
+  }
+}
