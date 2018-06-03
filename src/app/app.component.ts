@@ -1,7 +1,7 @@
-import { AuthService } from './_services/auth.service';
 import { Component, OnInit } from '@angular/core';
-import { JwtHelper } from 'angular2-jwt';
-import { User } from './_models/User';
+import { AuthService } from './_services/auth.service';
+import { User } from './_models/user';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-root',
@@ -9,24 +9,23 @@ import { User } from './_models/User';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'dating app';
-  jwtHelper: JwtHelper = new JwtHelper();
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private jwtHelperService: JwtHelperService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     const token = localStorage.getItem('token');
     const user: User = JSON.parse(localStorage.getItem('user'));
     if (token) {
-      this.authService.decodedToken = this.jwtHelper.decodeToken(token);
+      this.authService.decodedToken = this.jwtHelperService.decodeToken(token);
     }
     if (user) {
       this.authService.currentUser = user;
       if (this.authService.currentUser.photoUrl !== null) {
-      this.authService.changeMemberPhoto(user.photoUrl);
+        this.authService.changeMemberPhoto(user.photoUrl);
       } else {
-      this.authService.changeMemberPhoto('../assets/user.png');
+        this.authService.changeMemberPhoto('../assets/user.png');
       }
     }
   }
 }
+

@@ -9,11 +9,12 @@ export class AuthGuard implements CanActivate {
 
   constructor(private authService: AuthService, private router: Router, private alertify: AlertifyService) {}
 
-  canActivate(): Observable<boolean> | Promise<boolean> | boolean  {
+  canActivate(): Observable<boolean> | Promise<boolean> | boolean {
     if (this.authService.loggedIn()) {
       return true;
     }
-    this.alertify.error('You need to be login to have access to this area.');
+
+    this.alertify.error('You need to be logged in to access this area');
     this.router.navigate(['/home']);
     return false;
   }

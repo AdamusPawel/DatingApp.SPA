@@ -1,5 +1,5 @@
-import { Http } from '@angular/http';
 import { Component, OnInit } from '@angular/core';
+import { Http } from '@angular/http';
 
 @Component({
   selector: 'app-home',
@@ -7,8 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-registerMode = false;
-values: any;
+  registerMode = false;
+  values: any;
 
   constructor(private http: Http) { }
 
@@ -16,11 +16,10 @@ values: any;
   }
 
   registerToggle() {
-   this.registerMode = true;
+    this.registerMode = true;
   }
 
   cancelRegisterMode(registerMode: boolean) {
     this.registerMode = registerMode;
   }
-
 }

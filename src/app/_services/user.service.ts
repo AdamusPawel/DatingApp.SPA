@@ -1,88 +1,112 @@
-import { AuthHttp } from 'angular2-jwt';
-import { User } from '../_models/User';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Http, RequestOptions, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import { User } from '../_models/User';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
-import { PaginatedResult } from '../_models/pagination';
-
-
+import { PaginatedResult } from '../_models/Pagination';
+import { Message } from '../_models/message';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 @Injectable()
 export class UserService {
-  [x: string]: any;
     baseUrl = environment.apiUrl;
 
-constructor(private authHttp: AuthHttp) { }
+    constructor(private authHttp: HttpClient) { }
 
-    getUsers(page?: number, itemsPerPage?: number, userParams?: any) {
-        const paginatedResult: PaginatedResult<User[]> = new PaginatedResult<User[]>();
-        let queryString = '?';
+    getUsers(page?, itemsPerPage?, userParams?: any, likesParam?: string): Observable<PaginatedResult<User[]>> {
+        const paginatedResult = new PaginatedResult<User[]>();
+        let params = new HttpParams();
 
         if (page != null && itemsPerPage != null) {
-            queryString += 'pageNumber=' + page + '&pageSize=' + itemsPerPage + '&';
+            params = params.append('pageNumber', page)
+                .append('pageSize', itemsPerPage);
+        }
+
+        if (likesParam === 'Likers') {
+            params = params.append('Likers', 'true');
+        }
+
+        if (likesParam === 'Likees') {
+            params = params.append('Likees', 'true');
         }
 
         if (userParams != null) {
-            queryString +=
-            'minAge' + userParams.minAge +
-            '&maxAge' + userParams.maxAge +
-            '&gender' + userParams.gender +
-            '&orderBy=' + userParams.orderBy;
+            params = params.append('minAge', userParams.minAge)
+                .append('maxAge', userParams.maxAge)
+                .append('gender', userParams.gender)
+                .append('orderBy', userParams.orderBy);
         }
 
         return this.authHttp
-            .get(this.baseUrl + 'users' + queryString)
-            .map((response: Response) => {
-                paginatedResult.result = response.json();
+            .get<User[]>(`${this.baseUrl}users`, { observe: 'response', params: params})
+            .map(response => {
+                paginatedResult.result = response.body;
 
                 if (response.headers.get('Pagination') != null) {
                     paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
                 }
 
                 return paginatedResult;
-            })
-            .catch(this.handleError);
+            });
     }
 
     getUser(id): Observable<User> {
-        return this.authHttp
-        .get(this.baseUrl + 'users/' + id)
-        .map(response => <User>response.json())
-        .catch(this.handleError);
+        return this.authHttp.get<User>(`${this.baseUrl}users/${id}`);
     }
 
     updateUser(id: number, user: User) {
-        return this.authHttp.put(this.baseUrl + 'users/' + id, user).catch(this.handleError);
+        return this.authHttp.put(`${this.baseUrl}users/${id}`, user);
     }
 
     setMainPhoto(userId: number, id: number) {
-        return this.authHttp.post(this.baseUrl + 'users/' + userId + '/photos/' + id + '/setMain', {}).catch(this.handleError);
+        return this.authHttp.post(`${this.baseUrl}users/${userId}/photos/${id}/setmain`, {});
     }
 
     deletePhoto(userId: number, id: number) {
-        return this.authHttp.delete(this.baseUrl + 'users/' + userId + '/photos/' + id).catch(this.handleError);
+        return this.authHttp.delete(`${this.baseUrl}users/${userId}/photos/${id}`);
     }
 
-    private handleError(error: any) {
-        const applicationError = error.headers.get('Application-Error');
-        if (applicationError) {
-         return Observable.throw(applicationError);
+    sendLike(id: number, recipientId: number) {
+        return this.authHttp.post(`${this.baseUrl}users/${id}/like/${recipientId}`, {});
+    }
+
+    getMessages(id: number, page?, itemsPerPage?, messageContainer?: string) {
+        const paginatedResult = new PaginatedResult<Message[]>();
+        let params = new HttpParams();
+        params = params.append('MessageContainer', messageContainer);
+
+        if (page != null && itemsPerPage != null) {
+            params = params.append('pageNumber', page)
+                .append('pageSize', itemsPerPage);
         }
-        const serverError = error.json();
-        let modelStateErrors = '';
-        if (serverError) {
-         for (const key in serverError) {
-          if (serverError[key]) {
-           modelStateErrors += serverError[key] + '\n';
-          }
-         }
-        }
-        return Observable.throw(
-         modelStateErrors || 'Server error'
-        );
+
+        return this.authHttp.get<Message[]>(`${this.baseUrl}users/${id}/messages`, { observe: 'response', params: params })
+            .map(response => {
+                paginatedResult.result = response.body;
+
+                if (response.headers.get('Pagination') != null) {
+                    paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
+                }
+
+                return paginatedResult;
+            });
+    }
+
+    getMessageThread(id: number, recipientId: number) {
+        return this.authHttp.get<Message[]>(`${this.baseUrl}users/${id}/messages/thread/${recipientId}`);
+    }
+
+    sendMessage(id: number, message: Message) {
+        return this.authHttp.post<Message>(`${this.baseUrl}users/${id}/messages`, message);
+    }
+
+    deleteMessage(id: number, userId: number) {
+        return this.authHttp.post(`${this.baseUrl}users/${userId}/messages/${id}`, {});
+    }
+
+    markAsRead(userId: number, id: number) {
+        return this.authHttp.post(`${this.baseUrl}users/${userId}/messages/${id}/read`, {}).subscribe();
     }
 }
