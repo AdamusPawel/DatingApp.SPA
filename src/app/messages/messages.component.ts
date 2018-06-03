@@ -45,7 +45,7 @@ export class MessagesComponent implements OnInit {
   }
 
   deleteMessage(id: number) {
-    this.alertify.confirm('Are you sure you want to delete the message?', () => {
+    this.alertify.confirm('Delete message', 'Are you sure you want to delete the message?', () => {
       this.userService.deleteMessage(id, this.authService.decodedToken.nameid).subscribe(() => {
         _.remove(this.messages, {id: id});
         this.alertify.success('Message has been deleted');
