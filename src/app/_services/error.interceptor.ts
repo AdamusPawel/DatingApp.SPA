@@ -1,20 +1,18 @@
 import {
-    HttpInterceptor,
-    HttpEvent,
-    HttpHandler,
-    HttpRequest,
-    HttpErrorResponse,
-    HTTP_INTERCEPTORS
+          HttpInterceptor,
+          HttpEvent,
+          HttpHandler,
+          HttpRequest,
+          HttpErrorResponse,
+          HTTP_INTERCEPTORS
   } from '@angular/common/http';
-  import { Injectable } from '@angular/core';
-  import { Observable } from 'rxjs/Observable';
+
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 
   @Injectable()
   export class ErrorInterceptor implements HttpInterceptor {
-    intercept(
-      req: HttpRequest<any>,
-      next: HttpHandler
-    ): Observable<HttpEvent<any>> {
+    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
       return next.handle(req).catch(error => {
         if (error instanceof HttpErrorResponse) {
           const applicationError = error.headers.get('Application-Error');
