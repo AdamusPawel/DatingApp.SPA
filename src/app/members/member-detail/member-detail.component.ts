@@ -3,7 +3,7 @@ import { User } from '../../_models/User';
 import { UserService } from './../../_services/user.service';
 import { AlertifyService } from '../../_services/alertify.service';
 import { ActivatedRoute } from '@angular/router';
-import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gallery';
+import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation, NgxGalleryImageSize } from 'ngx-gallery';
 import { TabsetComponent } from 'ngx-bootstrap';
 
 @Component({
@@ -33,12 +33,13 @@ export class MemberDetailComponent implements OnInit {
 
     this.galleryOptions = [
       {
-        width: '500px',
+        width: '100%',
         height: '500px',
         imagePercent: 100,
         thumbnailsColumns: 4,
+        imageSize: NgxGalleryImageSize.Contain,
         imageAnimation: NgxGalleryAnimation.Slide,
-        preview: false
+        preview: true
       }
     ];
 

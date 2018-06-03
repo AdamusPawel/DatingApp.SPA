@@ -22,3 +22,8 @@
     overflow-y: scroll;
     height: 400px;
 }
+
+.messages-wrapper {
+    background-color: #ededed;
+    border-radius: 7px;
+}

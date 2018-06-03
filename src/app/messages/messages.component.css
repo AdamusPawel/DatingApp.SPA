@@ -9,3 +9,12 @@ table {
 .table > tbody > tr > td {
     vertical-align: middle;
 }
+
+.messages-wrapper {
+    background-color: #ffffff;
+    border-radius: 7px;
+}
+
+.spacing {
+height: 25px;
+}

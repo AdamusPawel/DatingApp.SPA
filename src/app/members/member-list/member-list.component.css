@@ -3,3 +3,11 @@
     flex-flow: row wrap;
     align-content: flex-end;
 }
+
+.bottom-spacing {
+    margin-bottom: 20px;
+    background-color: #fff;
+    padding: 10px;
+    border-color: lightgray 1px;
+    border-radius: 5px;
+}

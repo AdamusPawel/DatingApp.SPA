@@ -1,3 +1,5 @@
+<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
 <nav class="navbar navbar-inverse">
   <div class="container">
     <div class="navbar-header">
@@ -11,9 +13,9 @@
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul *ngIf="loggedIn()" class="nav navbar-nav">
-        <li routerLinkActive="active"><a [routerLink]="['/members']">Matches</a></li>
-        <li routerLinkActive="active"><a [routerLink]="['/lists']">Lists</a></li>
-        <li routerLinkActive="active"><a [routerLink]="['/messages']">Messages</a></li>
+        <li routerLinkActive="active"><a [routerLink]="['/members']"><i class="fa fa-heart"></i> Matches</a></li>
+        <li routerLinkActive="active"><a [routerLink]="['/lists']"><i class="fa fa-thumbs-up"></i> Likes</a></li>
+        <li routerLinkActive="active"><a [routerLink]="['/messages']"><i class="fa fa-envelope"></i> Messages</a></li>
       </ul>
 
       <form *ngIf="!loggedIn()" #loginForm="ngForm" class="navbar-form navbar-right" (ngSubmit)="login()">
@@ -23,7 +25,7 @@
         <div class="form-group">
           <input type="password" #password="ngModel" placeholder="Password" class="form-control"  required name="password" [(ngModel)]="model.password">
         </div>
-        <button type="submit" [disabled]="!loginForm.valid" class="btn btn-success">Sign in</button>
+        <button type="submit" [disabled]="!loginForm.valid" class="btn btn-primary"><i class="fa fa-key"></i> Sign in</button>
       </form>
 
       <ul *ngIf="loggedIn()" class="nav navbar-nav navbar-right">
